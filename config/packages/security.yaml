@@ -10,6 +10,9 @@ security:
                 class: App\Entity\User
                 property: username
     firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
         login:
             pattern: ^/api/login
             stateless: true
@@ -17,6 +20,11 @@ security:
                 check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            custom_authenticator: App\Security\SecurityAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                # target: app_any_route
 
         api:
             pattern: ^/api
@@ -24,12 +32,19 @@ security:
             jwt: ~
 
 
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
         main:
+            pattern: ^/
             lazy: true
             provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                default_target_path: product_list  # Redirection après connexion
+                username_parameter: email
+                password_parameter: password
+            logout:
+                path: app_logout
+                target: app_login
 
 
 
@@ -47,6 +62,9 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/products, roles: ROLE_USER }
 
 
 when@test:
