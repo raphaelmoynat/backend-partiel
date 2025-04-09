@@ -40,4 +40,13 @@ class ProductRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    public function findAllActive()
+    {
+        return $this->createQueryBuilder('product')
+            ->where('product.isDeleted = :isDeleted')
+            ->setParameter('isDeleted', false)
+            ->orderBy('product.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

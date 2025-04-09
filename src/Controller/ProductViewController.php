@@ -28,7 +28,7 @@ class ProductViewController extends AbstractController
     #[Route('/', name: 'product_list')]
     public function index(ProductRepository $productRepository): Response
     {
-        $products = $productRepository->findAll();
+        $products = $productRepository->findAllActive();
 
         return $this->render('product_view/index.html.twig', [
             'products' => $products,
@@ -100,7 +100,7 @@ class ProductViewController extends AbstractController
     public function delete( Product $product, EntityManagerInterface $entityManager): Response
     {
 
-        $entityManager->remove($product);
+        $product->setIsDeleted(true);
         $entityManager->flush();
 
 
