@@ -78,7 +78,7 @@ class ProductController extends AbstractController
     }
 
 
-    #[Route('/products/check/{qrCode}', name: 'check_product', methods: ['GET'])]
+    #[Route('/check/{qrCode}', name: 'check_product', methods: ['GET'])]
     public function checkProduct(string $qrCode, ProductRepository $productRepository): JsonResponse
     {
         $product = $productRepository->findOneBy(['qrCode' => $qrCode, 'isDeleted' => false]);
