@@ -29,6 +29,9 @@ class Order
     #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder')]
     private Collection $orderItems;
 
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private \DateTimeInterface $createdAt;
+
     public function __construct()
     {
         $this->orderItems = new ArrayCollection();
@@ -92,4 +95,16 @@ class Order
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
 }

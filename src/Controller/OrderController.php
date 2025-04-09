@@ -26,6 +26,7 @@ final class OrderController extends AbstractController
         $data = json_decode($request->getContent(), true);
         $order = new Order();
         $order->setCustomer($user);
+        $order->setCreatedAt(new \DateTime());
 
 
         $total = 0;

@@ -4,7 +4,7 @@
 
 {% block body %}
     <div class="container mt-4">
-        <h1>Liste des produits</h1>
+        <h1 class="mb-4">Liste des produits</h1>
 
         <div class="row">
             {% for product in products %}
@@ -25,12 +25,7 @@
                                 <a href="{{ path('product_delete', {'id': product.id}) }}" class="btn btn-danger">Suppr</a>
                                 <a href="{{ path('product_edit', {'id': product.id}) }}" class="btn btn-warning">Edit</a>
                                 <a href="{{ path('app_pdf_generator', {'id': product.id}) }}" class="btn btn btn-secondary">PDF</a>
-
-
                             </div>
-
-
-
                         </div>
                     </div>
                 </div>

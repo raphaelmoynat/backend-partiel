@@ -11,6 +11,7 @@
             <tr>
                 <th>ID</th>
                 <th>Client</th>
+                <th>Date</th>
                 <th>Montant total</th>
                 <th>Nombre d'articles</th>
                 <th>Actions</th>
@@ -27,7 +28,8 @@
                             Client inconnu
                         {% endif %}
                     </td>
-                    <td>{{ order.totalAmount|number_format(2, ',', ' ') }} €</td>
+                    <td>{{ order.createdAt|date('d/m/Y H:i') }}</td>
+                    <td>{{ order.totalAmount }}</td>
                     <td>{{ order.orderItems|length }}</td>
                     <td>
                         <a href="{{ path('admin_orders_show', {'id': order.id}) }}" class="btn btn-sm btn-primary">Détails</a>
