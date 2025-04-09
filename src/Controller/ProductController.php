@@ -78,4 +78,24 @@ class ProductController extends AbstractController
     }
 
 
+    #[Route('/products/check/{qrCode}', name: 'check_product', methods: ['GET'])]
+    public function checkProduct(string $qrCode, ProductRepository $productRepository): JsonResponse
+    {
+        $product = $productRepository->findOneBy(['qrCode' => $qrCode, 'isDeleted' => false]);
+        if ($product) {
+            return $this->json([
+                'exists' => true,
+                'product' => [
+                    'id' => $product->getId(),
+                    'name' => $product->getName(),
+                    'price' => $product->getPrice(),
+                    'qrCode' => $product->getQrCode(),
+                ]
+            ]);
+        }
+
+        return $this->json(['exists' => false, 'message' => 'Produit non trouvé'], 404);
+    }
+
+
 }
