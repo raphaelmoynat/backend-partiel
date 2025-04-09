@@ -102,13 +102,15 @@ final class OrderController extends AbstractController
                     'quantity' => $item->getQuantity(),
                     'unitPrice' => $item->getProduct()->getPrice(),
                     'subtotal' => $item->getProduct()->getPrice() * $item->getQuantity()
+
                 ];
             }
 
             $myOrders[] = [
                 'id' => $order->getId(),
                 'totalAmount' => $order->getTotalAmount(),
-                'items' => $items
+                'items' => $items,
+                "createdAt" => $order->getCreatedAt()->format('Y-m-d H:i:s')
             ];
         }
 
