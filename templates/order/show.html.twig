@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la commande #{{ order.id }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h2>Détails de la commande : id = {{ order.id }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Informations :</h4>
+
+                        <p><strong>Nom:</strong> {{ order.customer.username }} </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>Informations commande</h4>
+                        <p><strong>Montant total:</strong> {{ order.totalAmount|number_format(2, ',', ' ') }} €</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h3>Articles commandés</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Sous-total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in order.orderItems %}
+                        <tr>
+                            <td>{{ item.product.name }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.product.price }} €</td>
+                            <td>{{ (item.product.price * item.quantity) }} €</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4">Aucun article trouvé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="3" class="text-end">Total:</th>
+                        <th>{{ order.totalAmount }} €</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <a href="{{ path('admin_orders_list') }}" class="btn btn-secondary">Retour</a>
+        </div>
+    </div>
+{% endblock %}

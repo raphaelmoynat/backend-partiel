@@ -12,6 +12,8 @@
                 <p class="lead">Prix: {{ product.price }} €</p>
                 <p>ID du produit: {{ product.id }}</p>
 
+
+
                 <a href="{{ path('product_list') }}" class="btn btn-primary mt-5">Retour</a>
             </div>
 
@@ -23,6 +25,12 @@
                             <h5 class="card-title">QR Code</h5>
                             <img src="{{ product.qrCode }}" alt="QR Code pour {{ product.name }}" class="img-fluid" style="max-width: 250px;">
                         </div>
+                        <div class="text-center justify-content-center">
+                            <a href="{{ path('app_pdf_generator', {'id': product.id}) }}" class="btn btn btn-secondary">Voir PDF</a>
+
+
+                        </div>
+
                     </div>
                 {% endif %}
             </div>

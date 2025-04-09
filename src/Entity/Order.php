@@ -2,34 +2,31 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductRepository;
+use App\Repository\OrderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProductRepository::class)]
-class Product
+#[ORM\Entity(repositoryClass: OrderRepository::class)]
+#[ORM\Table(name: '`order`')]
+class Order
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $name = null;
-
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $qrCode = null;
-
     #[ORM\Column]
-    private ?float $price = null;
+    private ?float $totalAmount = null;
+
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $customer = null;
 
     /**
      * @var Collection<int, OrderItem>
      */
-    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: OrderItem::class, mappedBy: 'customerOrder')]
     private Collection $orderItems;
 
     public function __construct()
@@ -42,40 +39,26 @@ class Product
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getTotalAmount(): ?float
     {
-        return $this->name;
+        return $this->totalAmount;
     }
 
-    public function setName(string $name): static
+    public function setTotalAmount(float $totalAmount): static
     {
-        $this->name = $name;
+        $this->totalAmount = $totalAmount;
 
         return $this;
     }
 
-
-
-    public function getQrCode(): ?string
+    public function getCustomer(): ?User
     {
-        return $this->qrCode;
+        return $this->customer;
     }
 
-    public function setQrCode(?string $qrCode): static
+    public function setCustomer(?User $customer): static
     {
-        $this->qrCode = $qrCode;
-
-        return $this;
-    }
-
-    public function getPrice(): ?float
-    {
-        return $this->price;
-    }
-
-    public function setPrice(float $price): static
-    {
-        $this->price = $price;
+        $this->customer = $customer;
 
         return $this;
     }
@@ -92,7 +75,7 @@ class Product
     {
         if (!$this->orderItems->contains($orderItem)) {
             $this->orderItems->add($orderItem);
-            $orderItem->setProduct($this);
+            $orderItem->setCustomerOrder($this);
         }
 
         return $this;
@@ -102,8 +85,8 @@ class Product
     {
         if ($this->orderItems->removeElement($orderItem)) {
             // set the owning side to null (unless already changed)
-            if ($orderItem->getProduct() === $this) {
-                $orderItem->setProduct(null);
+            if ($orderItem->getCustomerOrder() === $this) {
+                $orderItem->setCustomerOrder(null);
             }
         }
 
